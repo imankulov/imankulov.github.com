@@ -9,7 +9,7 @@ projectlinks:
 
 **sdcv** subversion repository mirror with the set of [patches][patch] improving readline support (primarily autocompletion).
 
-*Note:* sdcv is a console version of [StarDict][stardict] program
+*Note:* sdcv is a console version of [StarDict][stardict] program.
 
 Deb-package for ubuntu has been built and uploaded to the [launchpad][]. 
 
