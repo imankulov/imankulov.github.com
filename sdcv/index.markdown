@@ -26,7 +26,6 @@ then type:
     apt-get update
     apt-get install sdcv
 
-
 #### Deb-based linux
 
 Append to `/etc/apt/sources.list`:
