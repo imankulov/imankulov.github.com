@@ -65,6 +65,21 @@ and override options only for the current jQuery object.
 
 <textarea id="area3">hello,wo</textarea>
 
+<p>This variant doesn't perform automatic completion which can be pretty
+annoying in some cases, but tab-driven completion is still works as
+expected. You may note also that completion treats well the case of zero-sized
+minimal chunk.</p>
+
+<code class='jscode'>
+    var suggests = ["head", "hello", "heart", "health", "horizontal", "horizont", "hormonotherapy"];
+    $("#area4").asuggest(suggests, {
+        'minChunkSize': 0,
+        'delimiters': ' \n',
+        'autoComplete': false,
+        'cycleOnTab': true
+    });
+</code>
+<textarea id='area4'>he</textarea>
 
 [autocomplete]: http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/ "jQuery Autocomplete"
 [fieldselection]: http://labs.0xab.cd/jquery/fieldselection/0.2.3-test/ "jQuery fieldsepection"
