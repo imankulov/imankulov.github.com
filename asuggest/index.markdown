@@ -100,7 +100,9 @@ key.
     var suggests = ["head", "hello", "heart", "health", "horizontal", "horizont", "hormonotherapy"];
     $("#area5").asuggest(suggests, {
         'endingSymbols': ', ',
-        'stopSuggestionKeys': [$.asuggestKeys.RETURN]
+        'stopSuggestionKeys': [$.asuggestKeys.RETURN],
+        'minChunkSize': 1,
+        'delimiters': ', \n'
     });
 </code>
 <textarea id='area5'>he</textarea>
