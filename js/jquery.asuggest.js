@@ -25,6 +25,25 @@
         });
     }
 
+    $.asuggestKeys = {
+                UNKNOWN: 0,
+                SHIFT: 16,
+                CTRL: 17,
+                ALT: 18,
+                LEFT: 37,
+                UP: 38,
+                RIGHT: 39,
+                DOWN: 40,
+                DEL: 46,
+                TAB: 9,
+                RETURN: 13,
+                ESC: 27,
+                COMMA: 188,
+                PAGEUP: 33,
+                PAGEDOWN: 34,
+                BACKSPACE: 8,
+                SPACE: 32
+    };
     $.asuggestFocused = null;
 
     $.fn.asuggest = function(suggests, options) {
@@ -37,7 +56,9 @@
         'delimiters': '\n ',
         'minChunkSize': 1,
         'cycleOnTab': true,
-        'autoComplete': true
+        'autoComplete': true,
+        'endingSymbols': ' ',
+        'stopSuggestionKeys': [$.asuggestKeys.RETURN, $.asuggestKeys.SPACE]
     };
 
     /* Make suggest:
@@ -52,21 +73,7 @@
     $.makeSuggest = function(area, suggests, options){
         options = $.extend({}, $.fn.asuggest.defaults, options);
 
-        var KEY = {
-                LEFT: 37,
-                UP: 38,
-                RIGHT: 39,
-                DOWN: 40,
-                DEL: 46,
-                TAB: 9,
-                RETURN: 13,
-                ESC: 27,
-                COMMA: 188,
-                PAGEUP: 33,
-                PAGEDOWN: 34,
-                BACKSPACE: 8
-        };
-
+        var KEY = $.asuggestKeys;
         var $area = $(area);
         $area.suggests = suggests;
         $area.options = options;
@@ -149,12 +156,40 @@
                     return false;
                 }
             }
+            // Check for conditions to stop suggestion
+            if ($area.getSelection().length &&
+                $.inArray(e.keyCode, $area.options.stopSuggestionKeys) != -1) {
+                // apply suggestion. Clean up selection and insert a space
+                var _selectionEnd = $area.getSelection().end +
+                        $area.options.endingSymbols.length;
+                var _scrollTop = $area[0].scrollTop;
+                var _text = $area.getSelection().text +
+                        $area.options.endingSymbols;
+                $area.replaceSelection(_text);
+                this.selectionStart = _selectionEnd;
+                this.selectionEnd = _selectionEnd;
+                // different kinds of finalization/workarounds
+                $area[0].scrollTop = _scrollTop;
+                e.preventDefault();
+                e.stopPropagation();
+                this.focus();
+                $.asuggestFocused = this;
+                return false;
+           }
         });
 
         $area.keyup(function(e){
+            var hasSpecialKeys = e.altKey || e.metaKey || e.ctrlKey;
+            var hasSpecialKeysOrShift = hasSpecialKeys || e.shiftKey;
+            console.log(e);
             switch(e.keyCode){
+            case KEY.UNKNOWN: // Special key released
+            case KEY.SHIFT:
+            case KEY.CTRL:
+            case KEY.ALT:
+                break;
             case KEY.TAB:
-                if ($area.options.cycleOnTab){
+                if (!hasSpecialKeysOrShift && $area.options.cycleOnTab){
                     break;
                 }
             case KEY.ESC:
@@ -164,7 +199,7 @@
             case KEY.DOWN:
             case KEY.LEFT:
             case KEY.RIGHT:
-                if ($area.options.autoComplete) {
+                if (!hasSpecialKeysOrShift && $area.options.autoComplete) {
                     var _selectionStart = $area.getSelection().start;
                     var _scrollTop = $area[0].scrollTop;
                     $area.replaceSelection("");
@@ -173,9 +208,8 @@
                     $area[0].scrollTop = _scrollTop; // firefox workaround
                 }
                 break;
-
             default:
-                if ($area.options.autoComplete) {
+                if (!hasSpecialKeys && $area.options.autoComplete) {
                     var chunk = $area.getChunk();
                     if (chunk.length >= $area.options.minChunkSize) {
                         $area.updateSelection( $area.getCompletion(performCycle=false) );
