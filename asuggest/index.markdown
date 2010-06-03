@@ -24,7 +24,7 @@ word completion is proposed.
 
 Requires:
  - [jQuery][jquery] (tested with 1.3.x and 1.4.x)
- - [jquery.fieldselection][fieldselection] >= 0.2
+ - [jquery.a-tools][a-tools] >= 1.4.1
 
 Basic asuggest sample. Sugestion works after the *newline* or *space* symbols.
 
@@ -113,5 +113,5 @@ currently defined are SHIFT, CTRL, ALT, LEFT, UP, RIGHT, DOWN, DEL, TAB,
 RETURN, ESC, COMMA, PAGEUP, PAGEDOWN, BACKSPACE and SPACE.
 
 [autocomplete]: http://bassistance.de/jquery-plugins/jquery-plugin-autocomplete/ "jQuery Autocomplete"
-[fieldselection]: http://labs.0xab.cd/jquery/fieldselection/0.2.3-test/ "jQuery fieldsepection"
+[a-tools]: http://plugins.jquery.com/project/a-tools "jQuery a-tools"
 [jquery]: http://www.jquery.com/ "jQuery"
